@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container { margin:20px; font-family:Arial; }
+        .title { font-size:24px; margin-bottom:8px; }
+        .rating-line { font-size:20px; }
+        .rating-text { color:#000; }
+        input, button { margin:5px; padding:5px; }
+        
+        /* 特殊用户名样式 */
+        .username-first { color:#000; }      /* 传奇头衔首字母 */
+        .username-rest { color:#FF0000; }    /* 传奇头衔后续字母 */
+        .username-first-4000 { color:#FF0000; }  /* 4000+首字母 */
+        .username-rest-4000 { color:#000; }      /* 4000+后续字母 */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="username" placeholder="用户名">
+        <input type="number" id="rating" placeholder="Rating">
+        <button onclick="updateDisplay()">显示</button>
+        <div id="displayArea"></div>
+    </div>
+
+    <script>
+        const ranks = [
+            { min:4000, title:'username',   color:'#000', next:5000 },
+            { min:3000, title:'Legendary Grandmaster', color:'#FF0000', next:4000 },
+            { min:2600, title:'International Grandmaster', color:'#FF0000', next:3000 },
+            { min:2400, title:'Grandmaster', color:'#FF0000', next:2600 },
+            { min:2300, title:'International Master', color:'#FF8C00', next:2400 },
+            { min:2100, title:'Master', color:'#FF8C00', next:2300 },
+            { min:1900, title:'Candidate Master', color:'#AA00AA', next:2100 },
+            { min:1600, title:'Expert', color:'#0000FF', next:1900 },
+            { min:1400, title:'Specialist', color:'#03A89E', next:1600 },
+            { min:1200, title:'Pupil', color:'#008000', next:1400 },
+            { min:-Infinity, title:'Newbie', color:'#808080', next:1200 }
+        ];
+
+        function processUsername(username) {
+            return username.length > 0 
+                ? username[0].toUpperCase() + username.slice(1).toLowerCase()
+                : '';
+        }
+
+        function getCurrentRank(rating) {
+            return ranks.find(r => rating >= r.min) || ranks[ranks.length-1];
+        }
+
+        function updateDisplay() {
+            const username = document.getElementById('username').value;
+            const rating = parseInt(document.getElementById('rating').value);
+            const rank = getCurrentRank(rating);
+            const promote = Math.max(0, rank.next - rating);
+            
+            // 构建标题
+            let titleHtml;
+            if (rank.title === 'Legendary Grandmaster') {
+                titleHtml = `
+                    <strong>
+                    <span style="color:${rank.color}">${rank.title} </span>
+                    <span>
+                        <span class="username-first">${username[0]}</span><span class="username-rest">${username.slice(1)}</span>
+                    </span>
+                    </strong>
+                `;
+            } else if (rank.title === 'username') {
+                const pname = processUsername(username);
+                titleHtml = `
+                    <strong>
+                    <span>
+                        <span class="username-first-4000">${pname[0]}</span><span class="username-rest-4000">${pname.slice(1)}</span>
+                    </span>
+                    <span>
+                        <span class="username-first" style="color:#FF0000">${username[0]}</span><span class="username-rest" style="color:#000">${username.slice(1)}</span>
+                    </span>
+                    </strong>
+                `;
+            } else {
+                titleHtml = `
+                    <strong>
+                    <span style="color:${rank.color}">${rank.title} </span>
+                    <span style="color:${rank.color}">${username}</span>
+                    </strong>
+                `;
+            }
+
+            // 构建显示内容
+            document.getElementById('displayArea').innerHTML = `
+                <div class="title">${titleHtml}</div>
+                <div class="rating-line">
+                    <span class="rating-text">Rating: </span>
+                    <strong><span style="color:${rank.color}">${rating}</span></strong>
+                    <span class="rating-text"> (+${promote} to promote)</span>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
