@@ -14,6 +14,7 @@
         .username-first-4000 { color:#FF0000; }  /* 4000+首字母 */
         .username-rest-4000 { color:#000; }      /* 4000+后续字母 */
     </style>
+    <title>Codeforces Rating计算</title>
 </head>
 <body>
     <div class="container">
@@ -61,7 +62,7 @@
                     <strong>
                     <span style="color:${rank.color}">${rank.title} </span>
                     <span>
-                        <span class="username-first">${username[0]}</span><span class="username-rest">${username.slice(1)}</span>
+                        <a href="https://codeforces.com/profile/${username}"><span class="username-first">${username[0]}</span><span class="username-rest">${username.slice(1)}</span></a>
                     </span>
                     </strong>
                 `;
@@ -73,7 +74,7 @@
                         <span class="username-first-4000">${pname[0]}</span><span class="username-rest-4000">${pname.slice(1)}</span>
                     </span>
                     <span>
-                        <span class="username-first" style="color:#FF0000">${username[0]}</span><span class="username-rest" style="color:#000">${username.slice(1)}</span>
+                        <a href="https://codeforces.com/profile/${username}"><span class="username-first" style="color:#FF0000">${username[0]}</span><span class="username-rest" style="color:#000">${username.slice(1)}</span></a>
                     </span>
                     </strong>
                 `;
@@ -81,7 +82,7 @@
                 titleHtml = `
                     <strong>
                     <span style="color:${rank.color}">${rank.title} </span>
-                    <span style="color:${rank.color}">${username}</span>
+                    <a href="https://codeforces.com/profile/${username}"><span style="color:${rank.color}">${username}</span></a>
                     </strong>
                 `;
             }
